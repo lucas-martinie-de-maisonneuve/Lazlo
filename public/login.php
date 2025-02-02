@@ -3,23 +3,16 @@ session_start();
 require '../db/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
+    $usernameLogin = $_POST['username_login'];
     $password = $_POST['password'];
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-    $stmt->execute([$username]);
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE username_login = ?");
+    $stmt->execute([$usernameLogin]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && hash('sha256', $password) === $user['password']) {
-        switch($user['username'])
-        {
-            case 'l':
-                $_SESSION['user'] = 'Lucas le golden retriever';
-                break;
-            case 'v':
-                $_SESSION['user'] = 'Vanny la plus jolie de toutes';
-                break;
-        }
+        $_SESSION['user'] = $user['username']; 
+
         header('Location: index.php');
         exit;
     } else {
@@ -41,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="login-container">
         <h2>Connexion</h2>
         <form method="post">
-            <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+            <input type="text" name="username_login" placeholder="Nom d'utilisateur" required>
             <input type="password" name="password" placeholder="Mot de passe" required>
             <button type="submit">Se connecter</button>
         </form>
