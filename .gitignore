@@ -1,0 +1,5 @@
+config/config.json
+
+
+#uncomment db once you corrected your db.php file
+# db.php
